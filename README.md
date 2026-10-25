@@ -19,7 +19,7 @@ Code/
     ├── os_codepoint_open/codepo_gb.zip                           (only for model_v1_energy_efficiency.py, keep zipped)
     ├── epc_postcode.csv + epc_postcode_info.json                 (created by model_v1_energy_efficiency.py on its first run)
     ├── os_open_greenspace/opgrsp_essh_tq.zip, opgrsp_essh_tl.zip  (only for model_v1_green_space.py, keep zipped)
-    └── green_features.csv                                        (created by model_v1_green_space.py on its first run)
+    └── green_features.csv                                        (created by model_v1_green_space.py on its first run; also used by model_v3.py)
 ```
 
 The two income files are free downloads from the London Datastore:
@@ -46,7 +46,8 @@ The file names must stay exactly like this, otherwise the code will not find the
 ## Run
 
 The file names show which model a script belongs to: `model_v0` (first regressions), `model_v1` (M8 with
-the controls step by step) and `model_v1_*` (analyses built on it), `model_v2` (the newest model).
+the controls step by step) and `model_v1_*` (analyses built on it), `model_v2` and `model_v2_*`, and `model_v3`
+(the complete final model).
 
 ```
 pip install pandas numpy matplotlib xlrd scipy shapely pyproj pyshp pyarrow
@@ -61,6 +62,7 @@ python model_v1_energy_efficiency.py
 python model_v1_green_space.py
 python model_v2.py
 python model_v2_roads.py
+python model_v3.py
 ```
 
 - `data_exploration.py` creates `data_exploration.md` and the graphs in `figures/`.
@@ -74,4 +76,5 @@ python model_v2_roads.py
 - `model_v1_green_space.py` creates `model_v1_green_space.md` and `figures/green_space.png` (does green space change the PM10 effect? PM10 × green share within 500 m, PM10 × local park within 400 m, green terciles, robustness checks, data sources). Needs scipy, shapely, pyproj and pyshp; uses `road_features.csv` from `model_v2_roads.py` for one check if it exists.
 - `model_v2.py` creates `model_v2.md` and `figures/v2_interactions.png` (v2 model: log-quadratic distances, cubic borough pay, 3-year average PM10; interactions PM10 × house, PM10², PM10 × share aged 0-15/65+, PM10 × education). Needs `gla_lsoa_atlas/lsoa-data.csv`.
 - `model_v2_roads.py` creates `model_v2_roads.md` and `figures/v2_roads.png` (v2 model with distance to the nearest motorway / A road and road noise: price effects, PM10 × near a main road, PM10 × noise, and whether main roads explain the larger PM10 discount for flats). Needs shapely, pyproj and pyshp.
+- `model_v3.py` creates `model_v3.md` and `figures/v3_final.png` (the complete final model: inventory of everything we controlled for or tested, a control audit that decides which controls stay, the v3 model with 3-year average PM10, main roads, road noise and green space, and the interactions PM10 × house and PM10 × low green space, robustness checks). Needs `road_features.csv` and `green_features.csv` (built by `model_v2_roads.py` and `model_v1_green_space.py`, or on its first run if the road and green data are there).
 - `null_results.txt` is a running list of everything we tested that had no (robust) effect, with numbers and the source file.

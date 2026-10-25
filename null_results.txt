@@ -8,7 +8,7 @@ The file name says which model the test was run on (model_v1* = v1, model_v2 = v
 
 PM10 effect = % change in price for +1 ug/m3 PM10.
 "pp" = percentage points of the PM10 effect (for interactions).
-Last updated: 2026-10-23
+Last updated: 2026-10-25
 
 
 1. NO EFFECT ON PRICES
@@ -120,6 +120,22 @@ PM10 x local park within 400 m
   Verdict: Having a local park nearby does not change the PM10 discount.
   Source:  model_v1_green_space.md
 
+Grade I heritage buildings within 200 m (as a control)
+  Test:    Drop the heritage count from the model with all candidate controls
+           (3-year average PM10, LSOA and year-quarter FE).
+  Result:  Joint test p = 0.992; PM10 effect unchanged (+0.00 s.e.); BIC
+           better without it.
+  Verdict: No effect within LSOAs. Dropped from the v3 model.
+  Source:  model_v3.md
+
+Green share within 500 m (as a control)
+  Test:    Drop the green share from the model with all candidate controls.
+  Result:  +0.72% per +10 pp, p = 0.125; PM10 effect unchanged (+0.01 s.e.).
+           (In the v1 sample with yearly PM10: +0.81%, p < 0.10.)
+  Verdict: Not significant within LSOAs, so not needed as a control. It is
+           in v3 anyway, as a main effect of the PM10 x low green interaction.
+  Source:  model_v3.md, model_v1_green_space.md
+
 
 2. TESTED, BUT DID NOT CHANGE THE PM10 ESTIMATE
 ------------------------------------------------
@@ -159,6 +175,18 @@ Distance to main roads and road noise as controls
   Verdict: No change. They capture local exposure the monitoring sites miss,
            while PM10 is identified from changes over time.
   Source:  model_v2_roads.md
+
+Choice of controls in the final model (control audit)
+  Test:    Drop each block of controls once from the model with all
+           candidate controls (3-year average PM10, PM10 effect -0.37%).
+  Result:  Distances (centre, tube, Grade I park, Thames), bus access,
+           heritage, census shares, main roads, road noise and green share
+           each move the PM10 effect by at most 0.14 s.e. Only the borough
+           economy (-1.59 s.e., -0.50% without it) and property type
+           (+0.78 s.e.) move it noticeably. v3 with fewer controls: -0.36%.
+  Verdict: The PM10 effect does not depend on the control set; its size
+           depends on the PM10 measure (3-year average vs yearly).
+  Source:  model_v3.md
 
 
 3. WEAK OR FRAGILE RESULTS (NOT ROBUST ENOUGH TO CLAIM)
@@ -200,11 +228,21 @@ Green space around the home and the PM10 effect
   Verdict: Weak evidence for the buffer idea: homes with almost no green
            space nearby carry a larger PM10 discount. Not robust enough to
            claim; the local-park measure shows nothing.
-  Source:  model_v1_green_space.md
+  Update (v3): PM10 x least green third (< 3.8% green within 500 m) on top
+           of the v3 model with 3-year average PM10: -0.235 pp, p = 0.007,
+           significant in 5 of 5 checks, now also with LSOA-by-year FE
+           (-0.280 pp); 8 of 8 checks in the final v3 table. Now the second
+           interaction of the v3 main model. Caution: it fails a Bonferroni
+           correction for the ~12 PM10 interactions tested (needs p < 0.0042),
+           and the cut was chosen after seeing the tercile results, so it is
+           the less certain of the two v3 interactions.
+  Source:  model_v1_green_space.md, model_v3.md
 
 PM10 main effect with borough-by-year fixed effects
   Test:    v1 model (M8) + borough-by-year FE.
   Result:  -0.07%, not significant (vs -0.21%).
   Verdict: Either borough-wide shocks drive part of the PM10 effect, or these FE
            absorb most of the PM10 variation. Cannot tell apart.
-  Source:  model_v1.md
+  Update (v3): with the 3-year average PM10 and the v3 controls, the PM10
+           effect for flats survives borough-by-year FE: -0.21%, p < 0.05.
+  Source:  model_v1.md, model_v3.md
