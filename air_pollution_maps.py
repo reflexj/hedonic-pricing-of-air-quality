@@ -14,6 +14,7 @@ Creates:
     figures/map_pm10.png           PM10, mean 2005-2014
     figures/map_nox.png            NOx, mean 2005-2014
     figures/map_pm10_by_year.png   PM10 in each year 2005-2014, one colour scale for all years
+    figures/map_*_white.png        the same three maps with a white background (for print)
     air_pollution_maps.md          the maps with notes on the method and the sources
 
 Run from the Code folder:
@@ -57,13 +58,16 @@ MIN_WEIGHT = 3       # fewer postcodes than this within the near kernel: use the
 CLOSE_M = 400        # closing the borough outlines across the Thames to get one London shape
 MARGIN_M = 4000      # map extent around London
 
-BG = "#17181a"             # background outside London
-ROAD_OUT = "#3d3f42"       # roads outside London
 ROAD_IN = "#3a1208"        # roads inside London (dark lines on the colour surface)
 THAMES = "#2f6fd6"
-TEXT = "#e8e6e1"
-SUBTLE = "#a9a7a1"
 CMAP = "turbo"             # blue - cyan - green - yellow - red, as in the LAEI maps
+
+THEMES = {  # every map is drawn twice: dark background (as the LAEI maps) and white background (for print)
+    "dark": {"bg": "#17181a", "road_out": "#3d3f42", "text": "#e8e6e1", "subtle": "#a9a7a1", "border": "white",
+             "outline": "white", "suffix": ""},
+    "white": {"bg": "white", "road_out": "#d6d5d1", "text": "#1d1d1b", "subtle": "#5f5e5a", "border": "#3d3d3a",
+              "outline": "#2b2b2b", "suffix": "_white"},
+}
 
 POLLUTANTS = {"pm10": ("PM10", "µg/m³"), "nox": ("NOx", "µg/m³")}
 
@@ -181,15 +185,15 @@ def poly_path(geom):
     return Path(np.concatenate(verts), np.concatenate(codes))
 
 
-def draw_base(ax, grid, london, thames, boroughs, roads, z, vmin, vmax, road_scale=1.0, borough_lw=0.5):
-    ax.set_facecolor(BG)
+def draw_base(ax, t, grid, london, thames, boroughs, roads, z, vmin, vmax, road_scale=1.0, borough_lw=0.5):
+    ax.set_facecolor(t["bg"])
     lines, width = roads
     if len(lines):
         start = np.array([ln[0] for ln in lines])
         shapely.prepare(london)
         inside = shapely.contains_xy(london, start[:, 0], start[:, 1])
         out_idx = np.where(~inside)[0]
-        ax.add_collection(LineCollection([lines[k] for k in out_idx], colors=ROAD_OUT,
+        ax.add_collection(LineCollection([lines[k] for k in out_idx], colors=t["road_out"],
                                          linewidths=width[out_idx] * road_scale, zorder=1))
     im = ax.imshow(z, extent=grid.extent, origin="lower", cmap=CMAP, vmin=vmin, vmax=vmax, interpolation="bilinear",
                    zorder=2)
@@ -200,12 +204,13 @@ def draw_base(ax, grid, london, thames, boroughs, roads, z, vmin, vmax, road_sca
     for g in boroughs["geometry"]:
         p = poly_path(g)
         if p is not None:
-            ax.add_patch(PathPatch(p, facecolor="none", edgecolor="white", linewidth=borough_lw, alpha=0.35, zorder=4))
+            ax.add_patch(PathPatch(p, facecolor="none", edgecolor=t["border"], linewidth=borough_lw, alpha=0.35,
+                                   zorder=4))
     tp = poly_path(thames)
     if tp is not None:
         ax.add_patch(PathPatch(tp, facecolor=THAMES, edgecolor=THAMES, linewidth=1.2, zorder=5))
     lp = poly_path(london)
-    ax.add_patch(PathPatch(lp, facecolor="none", edgecolor="white", linewidth=1.0, alpha=0.8, zorder=6))
+    ax.add_patch(PathPatch(lp, facecolor="none", edgecolor=t["outline"], linewidth=1.0, alpha=0.8, zorder=6))
     ax.set_xlim(grid.extent[0], grid.extent[1])
     ax.set_ylim(grid.extent[2], grid.extent[3])
     ax.set_aspect("equal")
@@ -232,8 +237,8 @@ def borough_circles(ax, boroughs, pc, col, london_mean):
                     fontweight="bold", zorder=8)
 
 
-def footer(fig, text, y=0.012):
-    fig.text(0.015, y, text, fontsize=6.5, color=SUBTLE, ha="left", va="bottom", wrap=True)
+def footer(fig, t, text, y=0.012):
+    fig.text(0.015, y, text, fontsize=6.5, color=t["subtle"], ha="left", va="bottom", wrap=True)
 
 
 SOURCE = ("Data: course data set (PM10 / NOx at the nearest monitoring site, Land Registry sales). Contains National "
@@ -241,62 +246,62 @@ SOURCE = ("Data: course data set (PM10 / NOx at the nearest monitoring site, Lan
           "database right (boundaries 2015, OS Open Roads current release).")
 
 
-def map_one(col, grid, london, thames, boroughs, roads, pc, inside):
+def map_one(t, col, grid, london, thames, boroughs, roads, pc, inside):
     name, unit = POLLUTANTS[col]
     z = grid.surface(pc["e"].to_numpy(), pc["n"].to_numpy(), pc[col].to_numpy(), inside)
     vmin, vmax = np.nanpercentile(z, [1, 99])
     # figure shaped like the map (London is about 1.25 times as wide as tall), so there are no empty side bands
-    fig = plt.figure(figsize=(8.4, 7.9), facecolor=BG)
+    fig = plt.figure(figsize=(8.4, 7.9), facecolor=t["bg"])
     ax = fig.add_axes((0.01, 0.16, 0.98, 0.73))
-    im = draw_base(ax, grid, london, thames, boroughs, roads, z, vmin, vmax)
+    im = draw_base(ax, t, grid, london, thames, boroughs, roads, z, vmin, vmax)
     mean = pc[col].mean()
     borough_circles(ax, boroughs, pc, col, mean)
-    fig.text(0.03, 0.955, f"Air pollution in London: {name}", fontsize=15, color=TEXT, fontweight="bold")
+    fig.text(0.03, 0.955, f"Air pollution in London: {name}", fontsize=15, color=t["text"], fontweight="bold")
     fig.text(0.03, 0.925, f"Mean 2005-{LAST_YEAR} at the nearest monitoring site, smoothed over "
-             f"{len(pc):,} postcodes with sales", fontsize=8.5, color=SUBTLE)
+             f"{len(pc):,} postcodes with sales", fontsize=8.5, color=t["subtle"])
     cax = fig.add_axes((0.05, 0.11, 0.50, 0.017))
     cb = fig.colorbar(im, cax=cax, orientation="horizontal")
-    cb.set_label(f"{name} ({unit})", color=TEXT, fontsize=8.5)
-    cb.ax.tick_params(colors=TEXT, labelsize=7.5)
+    cb.set_label(f"{name} ({unit})", color=t["text"], fontsize=8.5)
+    cb.ax.tick_params(colors=t["text"], labelsize=7.5)
     cb.outline.set_visible(False)
     dots = [plt.Line2D([], [], marker="o", linestyle="", markersize=9, markerfacecolor=c, markeredgecolor="white",
                        markeredgewidth=0.8) for c in ["#ef7d22", "#4c9a52"]]
     leg = fig.legend(dots, [f"above the London mean ({mean:.1f})", "below the London mean"],
                      title=f"Circles: borough mean ({unit})", loc="lower right", bbox_to_anchor=(0.97, 0.075),
-                     frameon=False, fontsize=7.5, title_fontsize=7.5, labelcolor=TEXT, alignment="left")
-    leg.get_title().set_color(SUBTLE)
-    footer(fig, SOURCE)
-    path = FIG_DIR / f"map_{col}.png"
-    fig.savefig(path, dpi=220, facecolor=BG)
+                     frameon=False, fontsize=7.5, title_fontsize=7.5, labelcolor=t["text"], alignment="left")
+    leg.get_title().set_color(t["subtle"])
+    footer(fig, t, SOURCE)
+    path = FIG_DIR / f"map_{col}{t['suffix']}.png"
+    fig.savefig(path, dpi=220, facecolor=t["bg"])
     plt.close(fig)
     return path, z
 
 
-def map_by_year(grid, london, thames, boroughs, py, inside):
+def map_by_year(t, grid, london, thames, boroughs, py, inside):
     years = sorted(py["year"].unique())
     zs = {y: grid.surface(*(py.loc[py["year"] == y, c].to_numpy() for c in ["e", "n", "pm10"]), inside)
           for y in years}
     vmin, vmax = np.nanpercentile(np.concatenate([z[np.isfinite(z)] for z in zs.values()]), [1, 99])
     ncol = 5
     nrow = int(np.ceil(len(years) / ncol))
-    fig, axes = plt.subplots(nrow, ncol, figsize=(13, 2.55 * nrow + 1.2), facecolor=BG)
+    fig, axes = plt.subplots(nrow, ncol, figsize=(13, 2.55 * nrow + 1.2), facecolor=t["bg"])
     for ax, y in zip(axes.flat, years):
-        im = draw_base(ax, grid, london, thames, boroughs, ([], []), zs[y], vmin, vmax, borough_lw=0.3)
+        im = draw_base(ax, t, grid, london, thames, boroughs, ([], []), zs[y], vmin, vmax, borough_lw=0.3)
         mean_y = py.loc[py["year"] == y, "pm10"].mean()
-        ax.set_title(f"{y}  (mean {mean_y:.1f})", color=TEXT, fontsize=9.5, pad=3)
+        ax.set_title(f"{y}  (mean {mean_y:.1f})", color=t["text"], fontsize=9.5, pad=3)
     for ax in list(axes.flat)[len(years):]:
         ax.set_visible(False)
-    fig.suptitle("PM10 in London, year by year (same colour scale in every panel)", color=TEXT, fontsize=13,
+    fig.suptitle("PM10 in London, year by year (same colour scale in every panel)", color=t["text"], fontsize=13,
                  x=0.015, ha="left", y=0.985, fontweight="bold")
     fig.subplots_adjust(left=0.01, right=0.99, top=0.9, bottom=0.2, wspace=0.03, hspace=0.18)
     cax = fig.add_axes((0.35, 0.115, 0.30, 0.02))
     cb = fig.colorbar(im, cax=cax, orientation="horizontal")
-    cb.set_label("PM10 (µg/m³), mean over the postcodes with sales that year", color=TEXT, fontsize=8.5)
-    cb.ax.tick_params(colors=TEXT, labelsize=7.5)
+    cb.set_label("PM10 (µg/m³), mean over the postcodes with sales that year", color=t["text"], fontsize=8.5)
+    cb.ax.tick_params(colors=t["text"], labelsize=7.5)
     cb.outline.set_visible(False)
-    footer(fig, SOURCE)
-    path = FIG_DIR / "map_pm10_by_year.png"
-    fig.savefig(path, dpi=200, facecolor=BG)
+    footer(fig, t, SOURCE)
+    path = FIG_DIR / f"map_pm10_by_year{t['suffix']}.png"
+    fig.savefig(path, dpi=200, facecolor=t["bg"])
     plt.close(fig)
     return path, {y: float(py.loc[py["year"] == y, "pm10"].mean()) for y in years}
 
@@ -315,13 +320,14 @@ def main():
     roads = read_roads()
     print(f"{len(pc):,} postcodes, {len(boroughs)} boroughs, {len(roads[0]):,} road links")
 
-    paths, stats = {}, {}
-    for col in POLLUTANTS:
-        paths[col], z = map_one(col, grid, london, thames, boroughs, roads, pc, inside)
-        stats[col] = (np.nanpercentile(z, 5), np.nanpercentile(z, 95), pc[col].mean())
-        print(f"Wrote {paths[col]}")
-    year_path, year_means = map_by_year(grid, london, thames, boroughs, py, inside)
-    print(f"Wrote {year_path}")
+    stats = {}
+    for t in THEMES.values():
+        for col in POLLUTANTS:
+            path, z = map_one(t, col, grid, london, thames, boroughs, roads, pc, inside)
+            stats[col] = (np.nanpercentile(z, 5), np.nanpercentile(z, 95), pc[col].mean())
+            print(f"Wrote {path}")
+        year_path, year_means = map_by_year(t, grid, london, thames, boroughs, py, inside)
+        print(f"Wrote {year_path}")
 
     year_md = " | ".join(f"{y}: {m:.1f}" for y, m in year_means.items())
     md = f"""# Air Pollution in London: Heat Maps
@@ -333,6 +339,9 @@ Generated by `air_pollution_maps.py` from our own data.
 ![NOx in London](figures/map_nox.png)
 
 ![PM10 year by year](figures/map_pm10_by_year.png)
+
+Every map also exists with a white background, for print and for the report: `figures/map_pm10_white.png`,
+`figures/map_nox_white.png` and `figures/map_pm10_by_year_white.png`.
 
 ## What the maps show
 
