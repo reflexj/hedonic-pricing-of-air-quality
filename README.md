@@ -19,7 +19,8 @@ Code/
     ├── os_codepoint_open/codepo_gb.zip                           (only for model_v1_energy_efficiency.py, keep zipped)
     ├── epc_postcode.csv + epc_postcode_info.json                 (created by model_v1_energy_efficiency.py on its first run)
     ├── os_open_greenspace/opgrsp_essh_tq.zip, opgrsp_essh_tl.zip  (only for model_v1_green_space.py, keep zipped)
-    └── green_features.csv                                        (created by model_v1_green_space.py on its first run; also used by model_v3.py)
+    ├── green_features.csv                                        (created by model_v1_green_space.py on its first run; also used by model_v3.py)
+    └── london_boundaries/statistical-gis-boundaries-london.zip   (only for air_pollution_maps.py, keep zipped)
 ```
 
 The two income files are free downloads from the London Datastore:
@@ -40,6 +41,10 @@ spaces) and the postcode centroids [OS Code-Point Open](https://osdatahub.os.uk/
 
 The green-space data are [OS Open Greenspace](https://osdatahub.os.uk/downloads/open/OpenGreenspace) (ESRI Shapefile,
 the 100 km squares TQ and TL, about 5 MB and 2 MB, Open Government Licence).
+
+The London boundaries for the maps are the
+[Statistical GIS Boundary Files for London](https://data.london.gov.uk/dataset/statistical-gis-boundary-files-london)
+(`statistical-gis-boundaries-london.zip`, about 27 MB, London Datastore, Open Government Licence).
 
 The file names must stay exactly like this, otherwise the code will not find them.
 
@@ -63,6 +68,7 @@ python model_v1_green_space.py
 python model_v2.py
 python model_v2_roads.py
 python model_v3.py
+python air_pollution_maps.py
 ```
 
 - `data_exploration.py` creates `data_exploration.md` and the graphs in `figures/`.
@@ -77,4 +83,5 @@ python model_v3.py
 - `model_v2.py` creates `model_v2.md` and `figures/v2_interactions.png` (v2 model: log-quadratic distances, cubic borough pay, 3-year average PM10; interactions PM10 × house, PM10², PM10 × share aged 0-15/65+, PM10 × education). Needs `gla_lsoa_atlas/lsoa-data.csv`.
 - `model_v2_roads.py` creates `model_v2_roads.md` and `figures/v2_roads.png` (v2 model with distance to the nearest motorway / A road and road noise: price effects, PM10 × near a main road, PM10 × noise, and whether main roads explain the larger PM10 discount for flats). Needs shapely, pyproj and pyshp.
 - `model_v3.py` creates `model_v3.md` and `figures/v3_final.png` (the complete final model: inventory of everything we controlled for or tested, a control audit that decides which controls stay, the v3 model with 3-year average PM10, main roads, road noise and green space, and the interactions PM10 × house and PM10 × low green space, robustness checks). Needs `road_features.csv` and `green_features.csv` (built by `model_v2_roads.py` and `model_v1_green_space.py`, or on its first run if the road and green data are there).
+- `air_pollution_maps.py` creates `air_pollution_maps.md` and the heat maps `figures/map_pm10.png`, `figures/map_nox.png` and `figures/map_pm10_by_year.png` (PM10 and NOx from our data, mean 2005-2014 per postcode, smoothed; with main roads, the Thames, borough lines and the borough means). Needs `london_boundaries/statistical-gis-boundaries-london.zip`; draws roads if `os_open_roads/oproad_essh_gb.zip` is there.
 - `null_results.txt` is a running list of everything we tested that had no (robust) effect, with numbers and the source file.
