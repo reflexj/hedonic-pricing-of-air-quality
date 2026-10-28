@@ -8,7 +8,7 @@ The file name says which model the test was run on (model_v1* = v1, model_v2 = v
 
 PM10 effect = % change in price for +1 ug/m3 PM10.
 "pp" = percentage points of the PM10 effect (for interactions).
-Last updated: 2026-10-25
+Last updated: 2026-10-28
 
 
 1. NO EFFECT ON PRICES
@@ -188,6 +188,28 @@ Choice of controls in the final model (control audit)
            depends on the PM10 measure (3-year average vs yearly).
   Source:  model_v3.md
 
+
+Green space as an instrument for PM10 (2SLS, lecturer's suggestion)
+  Test:    v3 controls, 3-year average PM10 instrumented by the green share
+           within 500 m: (A) with LSOA FE, (B) with borough FE (also MSOA FE,
+           borough clusters), (C) green share x year dummies with LSOA FE and
+           the green share as a control. Anderson-Rubin intervals, Hansen J,
+           and two checks of the exclusion restriction.
+  Result:  Weak instrument everywhere: first-stage F = 1.1 (A), 5.6 (B),
+           1.8 (B, MSOA FE), 1.7 (C); needs about 10. A fails by construction
+           (PM10 is constant within LSOA-years, green space is fixed in time).
+           B: greener places have slightly lower PM10 (-0.24 ug/m3 per +10 pp
+           green, right sign) but 2SLS = +0.57% (s.e. 1.71), Anderson-Rubin
+           95% interval -5.3% to +6.6%; A and C: interval unbounded. All
+           intervals contain zero and the OLS effect (-0.36%).
+           Exclusion: green space has no significant direct price effect with
+           PM10 held fixed (imprecise), but greener postcodes differ in other
+           price determinants (price predicted by the controls +1.54% per
+           +10 pp green within LSOAs, p < 0.01).
+  Verdict: Unusable with our data: PM10 is measured at monitoring sites,
+           green space within 500 m and fixed in time. The IV neither confirms
+           nor rejects the v3 PM10 effect; v3 stays the main model.
+  Source:  model_v4.md
 
 3. WEAK OR FRAGILE RESULTS (NOT ROBUST ENOUGH TO CLAIM)
 -------------------------------------------------------

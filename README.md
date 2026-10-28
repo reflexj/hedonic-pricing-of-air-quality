@@ -51,8 +51,8 @@ The file names must stay exactly like this, otherwise the code will not find the
 ## Run
 
 The file names show which model a script belongs to: `model_v0` (first regressions), `model_v1` (M8 with
-the controls step by step) and `model_v1_*` (analyses built on it), `model_v2` and `model_v2_*`, and `model_v3`
-(the complete final model).
+the controls step by step) and `model_v1_*` (analyses built on it), `model_v2` and `model_v2_*`, `model_v3`
+(the complete final model) and `model_v4` (green space as an instrument for PM10).
 
 ```
 pip install pandas numpy matplotlib xlrd scipy shapely pyproj pyshp pyarrow
@@ -68,6 +68,7 @@ python model_v1_green_space.py
 python model_v2.py
 python model_v2_roads.py
 python model_v3.py
+python model_v4.py
 python air_pollution_maps.py
 ```
 
@@ -83,5 +84,6 @@ python air_pollution_maps.py
 - `model_v2.py` creates `model_v2.md` and `figures/v2_interactions.png` (v2 model: log-quadratic distances, cubic borough pay, 3-year average PM10; interactions PM10 × house, PM10², PM10 × share aged 0-15/65+, PM10 × education). Needs `gla_lsoa_atlas/lsoa-data.csv`.
 - `model_v2_roads.py` creates `model_v2_roads.md` and `figures/v2_roads.png` (v2 model with distance to the nearest motorway / A road and road noise: price effects, PM10 × near a main road, PM10 × noise, and whether main roads explain the larger PM10 discount for flats). Needs shapely, pyproj and pyshp.
 - `model_v3.py` creates `model_v3.md` and `figures/v3_final.png` (the complete final model: inventory of everything we controlled for or tested, a control audit that decides which controls stay, the v3 model with 3-year average PM10, main roads, road noise and green space, and the interactions PM10 × house and PM10 × low green space, robustness checks). Needs `road_features.csv` and `green_features.csv` (built by `model_v2_roads.py` and `model_v1_green_space.py`, or on its first run if the road and green data are there).
+- `model_v4.py` creates `model_v4.md` and `figures/v4_green_iv.png` (green space as an instrument for PM10, the lecturer's suggestion: 2SLS on the v3 model with LSOA FE, borough FE and green share × year, first-stage F statistics, Anderson-Rubin intervals, checks of the exclusion restriction; result: a weak instrument). Needs the same data as `model_v3.py`.
 - `air_pollution_maps.py` creates `air_pollution_maps.md` and the heat maps `figures/map_pm10.png`, `figures/map_nox.png` and `figures/map_pm10_by_year.png` (PM10 and NOx from our data, mean 2005-2014 per postcode, smoothed; with main roads, the Thames, borough lines and the borough means), each also with a white background (`figures/map_*_white.png`). Needs `london_boundaries/statistical-gis-boundaries-london.zip`; draws roads if `os_open_roads/oproad_essh_gb.zip` is there.
 - `null_results.txt` is a running list of everything we tested that had no (robust) effect, with numbers and the source file.
