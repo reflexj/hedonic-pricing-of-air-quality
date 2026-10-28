@@ -4,8 +4,8 @@ HE3027 Group Project: hedonic regressions of house prices on air pollution (PM10
 Adds the controls step by step (M1 to M8), then robustness checks (M9 NOx, crime),
 and writes everything to model_v1.md.
 
-Run from the Code folder:
-    python model_v1.py
+Run from the repository root:
+    python models/model_v1.py
 
 Needs: pandas, numpy
 Data:  data/land_registry_pollution.dta, data/land_registry_crime.dta (for the crime check)
@@ -16,9 +16,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-CODE_DIR = Path(__file__).resolve().parent
+MODEL_DIR = Path(__file__).resolve().parent   # models/ (scripts and their .md results)
+CODE_DIR = MODEL_DIR.parent                   # repository root (data/, figures/)
 DATA_DIR = CODE_DIR / "data"
-MD_FILE = CODE_DIR / "model_v1.md"
+MD_FILE = MODEL_DIR / "model_v1.md"
 
 TRIM = 0.01          # drop bottom and top 1% of prices
 LAST_YEAR = 2014     # jobdensity is missing for all of 2015

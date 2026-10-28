@@ -17,8 +17,8 @@ moves the PM10 effect by 0.5 standard errors or more; then simplify a kept block
 
 Writes model_v3.md and figures/v3_final.png.
 
-Run from the Code folder:
-    python model_v3.py
+Run from the repository root:
+    python models/model_v3.py
 
 Needs: pandas, numpy, matplotlib, scipy, shapely, pyproj, pyshp
 Data:  data/land_registry_pollution.dta, data/gla_lsoa_atlas/lsoa-data.csv,
@@ -31,14 +31,14 @@ import numpy as np
 import pandas as pd
 
 import model_v1_green_space as green
-from model_v1 import CLUSTER, CODE_DIR, PROPERTY, fe_ols, load_data, pct, stars, two_fe_ols
+from model_v1 import CLUSTER, CODE_DIR, MODEL_DIR, PROPERTY, fe_ols, load_data, pct, stars, two_fe_ols
 from model_v1_income_groups import bic, gbp, p_fmt, p_normal
 from model_v1_income_small_area import lincom
 from model_v1_pm10_smoothing import add_smoothed_pm10
 from model_v2 import add_lsoa_atlas, add_v2_terms, coef, sig_txt, varying, with_pm
 from model_v2_roads import NOISE_VARS, ROAD_VARS, add_road_features, price_pct, wald_chi2
 
-MD_FILE = CODE_DIR / "model_v3.md"
+MD_FILE = MODEL_DIR / "model_v3.md"
 FIG_DIR = CODE_DIR / "figures"
 FIG_FILE = FIG_DIR / "v3_final.png"
 
@@ -432,7 +432,7 @@ values).
 
 WTP = −effect × mean price of the group.
 
-![PM10 effect across model versions](figures/v3_final.png)
+![PM10 effect across model versions](../figures/v3_final.png)
 
 ### Full coefficient table
 

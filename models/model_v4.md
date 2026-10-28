@@ -69,7 +69,7 @@ space. F: clustered Wald F statistic of the excluded instrument(s); below 10 the
 instrument: it contains every PM10 effect that the data cannot reject at 5%. Values between
 -20.00% and +20.00% were tried.
 
-![OLS vs 2SLS](figures/v4_green_iv.png)
+![OLS vs 2SLS](../figures/v4_green_iv.png)
 
 **Setting C, first stage by year** (PM10 change in µg/m³ per +10 pp green space, relative to 2007):
 

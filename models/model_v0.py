@@ -5,8 +5,8 @@ controlling step by step for crime, distance to the centre and distance to the n
 Creates:
     model_v0.md    regression table and short interpretation
 
-Run from the Code folder:
-    python model_v0.py
+Run from the repository root:
+    python models/model_v0.py
 
 Needs: pandas, numpy
 """
@@ -16,9 +16,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-CODE_DIR = Path(__file__).resolve().parent
+MODEL_DIR = Path(__file__).resolve().parent   # models/
+CODE_DIR = MODEL_DIR.parent                   # repository root
 DATA_DIR = CODE_DIR / "data"
-MD_FILE = CODE_DIR / "model_v0.md"
+MD_FILE = MODEL_DIR / "model_v0.md"
 
 TRIM = 0.01   # drop the bottom and top 1% of prices (same rule as data_exploration.py)
 

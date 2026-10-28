@@ -19,8 +19,8 @@ PM10 × green space, with checks for the main confounders (greener postcodes hav
 Writes model_v1_green_space.md and figures/green_space.png. The green-space values per postcode are cached in
 data/green_features.csv, which is built on the first run (delete it to rebuild).
 
-Run from the Code folder:
-    python model_v1_green_space.py
+Run from the repository root:
+    python models/model_v1_green_space.py
 
 Needs: pandas, numpy, matplotlib, scipy, shapely, pyproj, pyshp
 Data:  data/land_registry_pollution.dta
@@ -40,14 +40,14 @@ import shapely
 from pyproj import Transformer
 from scipy.signal import fftconvolve
 
-from model_v1 import (ACCESS, AMENITY, CLUSTER, CODE_DIR, DATA_DIR, PROPERTY, SOCIO, fe_ols, load_data, pct,
+from model_v1 import (ACCESS, AMENITY, CLUSTER, CODE_DIR, MODEL_DIR, DATA_DIR, PROPERTY, SOCIO, fe_ols, load_data, pct,
                       stars, two_fe_ols)
 from model_v1_income_groups import gbp, p_fmt, p_normal, wald
 from model_v1_income_small_area import lincom
 from model_v1_pm10_smoothing import add_smoothed_pm10
 from model_v2 import by_year, coef, sig_txt, varying
 
-MD_FILE = CODE_DIR / "model_v1_green_space.md"
+MD_FILE = MODEL_DIR / "model_v1_green_space.md"
 FIG_DIR = CODE_DIR / "figures"
 FIG_FILE = FIG_DIR / "green_space.png"
 
@@ -584,7 +584,7 @@ the local-park measure stays the same).
 WTP = −effect × mean price of the group. "All homes" is the main tercile model; flats and houses are separate
 models (with their own terciles cut over all sales).
 
-![PM10 effect by green space](figures/green_space.png)
+![PM10 effect by green space](../figures/green_space.png)
 
 ## Verdict
 

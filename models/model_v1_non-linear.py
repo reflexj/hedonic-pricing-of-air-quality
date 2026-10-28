@@ -9,8 +9,8 @@ first only for dist_to_cbd, then for all five distance variables. Each version i
 with the fixed effects of M5 to M8, and compared on fit (R², adjusted R², BIC), on a clustered
 Wald test of the extra terms, and on the PM10 effect. Writes model_v1_non-linear.md.
 
-Run from the Code folder:
-    python model_v1_non-linear.py
+Run from the repository root:
+    python models/model_v1_non-linear.py
 
 Needs: pandas, numpy, scipy
 Data:  data/land_registry_pollution.dta
@@ -24,8 +24,8 @@ from scipy import stats
 
 from model_v1 import (ACCESS, AMENITY, CLUSTER, PROPERTY, SOCIO, load_data, pct, stars)
 
-CODE_DIR = Path(__file__).resolve().parent
-MD_FILE = CODE_DIR / "model_v1_non-linear.md"
+MODEL_DIR = Path(__file__).resolve().parent   # models/
+MD_FILE = MODEL_DIR / "model_v1_non-linear.md"
 
 DISTANCES = ["dist_to_cbd", "tube_km", "bus_km", "park_km", "thames_km"]
 LOG_FLOOR = 0.01     # km; park_km is 0 for 11 sales, so logs use max(x, 10 m)

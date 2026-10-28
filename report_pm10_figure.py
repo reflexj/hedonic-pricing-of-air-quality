@@ -14,6 +14,11 @@ Data:  data/land_registry_pollution.dta
 import matplotlib.pyplot as plt
 import numpy as np
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent / "models"))   # the model scripts live in models/
+
 from model_v1 import CODE_DIR, load_data
 from model_v1_pm10_smoothing import add_smoothed_pm10
 

@@ -69,7 +69,7 @@ in income within an area over time.
 
 ### GLA median household income per LSOA, 2011/12
 
-![Income groups by LSOA household income](figures/wtp_by_income_lsoa.png)
+![Income groups by LSOA household income](../figures/wtp_by_income_lsoa.png)
 
 | Group | Income range | Mean income | LSOAs | Boroughs | Sales | Mean price | Mean PM10 |
 |---|---|---|---|---|---|---|---|
@@ -99,7 +99,7 @@ Differences between groups (standard errors in brackets):
 
 ### ONS mean household income per MSOA, 2011/12
 
-![Income groups by MSOA household income](figures/wtp_by_income_msoa.png)
+![Income groups by MSOA household income](../figures/wtp_by_income_msoa.png)
 
 | Group | Income range | Mean income | MSOAs | Boroughs | Sales | Mean price | Mean PM10 |
 |---|---|---|---|---|---|---|---|
@@ -129,7 +129,7 @@ Differences between groups (standard errors in brackets):
 
 ### Mean gross annual pay per borough, 2005-2014
 
-![Income groups by Borough pay](figures/wtp_by_income_borough.png)
+![Income groups by Borough pay](../figures/wtp_by_income_borough.png)
 
 | Group | Income range | Mean income | Boroughs | Sales | Mean price | Mean PM10 |
 |---|---|---|---|---|---|---|

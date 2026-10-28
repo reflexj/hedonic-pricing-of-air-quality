@@ -9,8 +9,8 @@ Part 2: split the boroughs into low, middle and high income groups and test whet
 
 Writes model_v1_income_groups.md and figures/wtp_by_income_group.png.
 
-Run from the Code folder:
-    python model_v1_income_groups.py
+Run from the repository root:
+    python models/model_v1_income_groups.py
 
 Needs: pandas, numpy, matplotlib
 Data:  data/land_registry_pollution.dta
@@ -22,9 +22,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from model_v1 import (ACCESS, AMENITY, CODE_DIR, PROPERTY, SOCIO, fe_ols, load_data, pct, stars)
+from model_v1 import (ACCESS, AMENITY, CODE_DIR, MODEL_DIR, PROPERTY, SOCIO, fe_ols, load_data, pct, stars)
 
-MD_FILE = CODE_DIR / "model_v1_income_groups.md"
+MD_FILE = MODEL_DIR / "model_v1_income_groups.md"
 FIG_DIR = CODE_DIR / "figures"
 FIG_FILE = FIG_DIR / "wtp_by_income_group.png"
 
@@ -350,7 +350,7 @@ The last column is the variation that identifies the PM10 effect (PM10 changes o
 
 M8 (with the chosen income control) estimated separately for each group:
 
-![PM10 effect and WTP by income group](figures/wtp_by_income_group.png)
+![PM10 effect and WTP by income group](../figures/wtp_by_income_group.png)
 
 | Group | PM10 effect | Std. error (pp) | 95% CI | WTP for −1 µg/m³ | 95% CI | Elasticity at mean PM10 | Sales |
 |---|---|---|---|---|---|---|---|

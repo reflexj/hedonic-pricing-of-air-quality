@@ -24,8 +24,8 @@ green space predict the other price determinants (balance test)?
 
 Writes model_v4.md and figures/v4_green_iv.png.
 
-Run from the Code folder:
-    python model_v4.py
+Run from the repository root:
+    python models/model_v4.py
 
 Needs: pandas, numpy, matplotlib, scipy, shapely, pyproj, pyshp
 Data:  as model_v3.py (data/road_features.csv and data/green_features.csv are reused)
@@ -36,13 +36,13 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from model_v1 import CLUSTER, CODE_DIR, fe_ols, pct
+from model_v1 import CLUSTER, CODE_DIR, MODEL_DIR, fe_ols, pct
 from model_v1_income_groups import gbp, p_fmt
 from model_v1_pm10_smoothing import fe_iv
 from model_v2 import coef, sig_txt, with_pm
 from model_v3 import LABELS, V3_CONTROLS, finish, prepare
 
-MD_FILE = CODE_DIR / "model_v4.md"
+MD_FILE = MODEL_DIR / "model_v4.md"
 FIG_DIR = CODE_DIR / "figures"
 FIG_FILE = FIG_DIR / "v4_green_iv.png"
 
@@ -371,7 +371,7 @@ space. F: clustered Wald F statistic of the excluded instrument(s); below {STRON
 instrument: it contains every PM10 effect that the data cannot reject at 5%. Values between
 {pct(AR_GRID[0])} and {pct(AR_GRID[-1])} were tried.
 
-![OLS vs 2SLS](figures/v4_green_iv.png)
+![OLS vs 2SLS](../figures/v4_green_iv.png)
 
 **Setting C, first stage by year** (PM10 change in µg/m³ per +10 pp green space, relative to {years[0]}):
 

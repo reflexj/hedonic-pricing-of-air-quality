@@ -113,7 +113,7 @@ From the one-interaction models. WTP in GBP only where the groups have different
 | Education | No qualif. at P10 (5%) | -0.21%** | 0.097 |  |
 | Education | No qualif. at P90 (27%) | -0.55%*** | 0.139 |  |
 
-![PM10 effect by group](figures/v2_interactions.png)
+![PM10 effect by group](../figures/v2_interactions.png)
 
 ### Detail by interaction
 

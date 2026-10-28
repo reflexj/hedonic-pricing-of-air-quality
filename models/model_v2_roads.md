@@ -91,7 +91,7 @@ Joint tests (clustered Wald, χ²):
 -0.36% in model v2 on the same sales. Roads and noise are fixed over time, while the PM10 effect with LSOA
 fixed effects comes from changes over time, so they hardly change it.
 
-![Main roads, noise and the PM10 effect](figures/v2_roads.png)
+![Main roads, noise and the PM10 effect](../figures/v2_roads.png)
 
 ## Part 2: Is the PM10 discount larger next to a main road?
 

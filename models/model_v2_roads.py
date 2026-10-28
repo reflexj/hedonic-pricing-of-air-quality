@@ -14,8 +14,8 @@ and asks three questions:
 Writes model_v2_roads.md and figures/v2_roads.png. The road and noise values per postcode are cached in
 data/road_features.csv, which is built on the first run (delete it to rebuild).
 
-Run from the Code folder:
-    python model_v2_roads.py
+Run from the repository root:
+    python models/model_v2_roads.py
 
 Needs: pandas, numpy, matplotlib, scipy, shapely, pyproj, pyshp
 Data:  data/land_registry_pollution.dta, data/gla_lsoa_atlas/lsoa-data.csv,
@@ -36,12 +36,12 @@ import shapely
 from pyproj import Transformer
 from scipy import stats
 
-from model_v1 import CLUSTER, CODE_DIR, DATA_DIR, fe_ols, load_data, pct, stars, two_fe_ols
+from model_v1 import CLUSTER, CODE_DIR, MODEL_DIR, DATA_DIR, fe_ols, load_data, pct, stars, two_fe_ols
 from model_v1_income_groups import p_fmt, p_normal
 from model_v1_pm10_smoothing import add_smoothed_pm10
 from model_v2 import CONTROLS_V2, add_lsoa_atlas, add_v2_terms, cell, coef, m8v2, sig_txt, varying, with_pm
 
-MD_FILE = CODE_DIR / "model_v2_roads.md"
+MD_FILE = MODEL_DIR / "model_v2_roads.md"
 FIG_DIR = CODE_DIR / "figures"
 FIG_FILE = FIG_DIR / "v2_roads.png"
 
@@ -432,7 +432,7 @@ Joint tests (clustered Wald, χ²):
 {pct(b_v2)} in model v2 on the same sales. Roads and noise are fixed over time, while the PM10 effect with LSOA
 fixed effects comes from changes over time, so {'they hardly change it' if abs(b_both - b_v2) < 0.5 * s_v2 else 'they change it noticeably'}.
 
-![Main roads, noise and the PM10 effect](figures/v2_roads.png)
+![Main roads, noise and the PM10 effect](../figures/v2_roads.png)
 
 ## Part 2: Is the PM10 discount larger next to a main road?
 

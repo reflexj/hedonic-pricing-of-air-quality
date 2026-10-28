@@ -28,7 +28,7 @@ Means over all sales (2005-2015, prices trimmed). "Monitoring sites in use" coun
 year, which is close to the number of sites that are the nearest site for at least one home. The last column
 is the variation that the v1 model actually uses (sample 2005-2014).
 
-![PM10 over time and PM10 effect by specification](figures/pm10_smoothing.png)
+![PM10 over time and PM10 effect by specification](../figures/pm10_smoothing.png)
 
 - From 2010 to 2011 PM10 rose by 2.3 µg/m³ on average and in
   83% of LSOAs, so the jump hit almost all of London at the same time. It lasted

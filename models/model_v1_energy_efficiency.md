@@ -158,7 +158,7 @@ Across the 11 specifications the continuous interaction is positive in 2, signif
 
 WTP = −effect × mean price of the group. "All homes" is the main group model; flats and houses are separate models.
 
-![PM10 effect by energy efficiency](figures/energy_efficiency.png)
+![PM10 effect by energy efficiency](../figures/energy_efficiency.png)
 
 ## Verdict
 

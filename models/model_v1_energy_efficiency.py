@@ -21,8 +21,8 @@ with checks for the main confounders (flats and new builds are more efficient AN
 Writes model_v1_energy_efficiency.md and figures/energy_efficiency.png. The postcode-level EPC values are cached
 in data/epc_postcode.csv (+ data/epc_postcode_info.json), which are built on the first run (delete them to rebuild).
 
-Run from the Code folder:
-    python model_v1_energy_efficiency.py
+Run from the repository root:
+    python models/model_v1_energy_efficiency.py
 
 Needs: pandas, numpy, matplotlib, scipy, shapely, pyproj, pyarrow
 Data:  data/land_registry_pollution.dta
@@ -45,14 +45,14 @@ import shapely
 from pyproj import Transformer
 from scipy.spatial import cKDTree
 
-from model_v1 import (ACCESS, AMENITY, CLUSTER, CODE_DIR, DATA_DIR, PROPERTY, SOCIO, fe_ols, load_data, pct,
+from model_v1 import (ACCESS, AMENITY, CLUSTER, CODE_DIR, MODEL_DIR, DATA_DIR, PROPERTY, SOCIO, fe_ols, load_data, pct,
                       stars, two_fe_ols)
 from model_v1_income_groups import gbp, p_fmt, p_normal, wald
 from model_v1_income_small_area import lincom
 from model_v1_pm10_smoothing import add_smoothed_pm10
 from model_v2 import by_year, coef, sig_txt, varying
 
-MD_FILE = CODE_DIR / "model_v1_energy_efficiency.md"
+MD_FILE = MODEL_DIR / "model_v1_energy_efficiency.md"
 FIG_DIR = CODE_DIR / "figures"
 FIG_FILE = FIG_DIR / "energy_efficiency.png"
 
@@ -580,7 +580,7 @@ Across the {n_checks} specifications the continuous interaction is positive in {
 
 WTP = −effect × mean price of the group. "All homes" is the main group model; flats and houses are separate models.
 
-![PM10 effect by energy efficiency](figures/energy_efficiency.png)
+![PM10 effect by energy efficiency](../figures/energy_efficiency.png)
 
 ## Verdict
 

@@ -81,7 +81,7 @@ The last column is the variation that identifies the PM10 effect (PM10 changes o
 
 M8 (with the chosen income control) estimated separately for each group:
 
-![PM10 effect and WTP by income group](figures/wtp_by_income_group.png)
+![PM10 effect and WTP by income group](../figures/wtp_by_income_group.png)
 
 | Group | PM10 effect | Std. error (pp) | 95% CI | WTP for −1 µg/m³ | 95% CI | Elasticity at mean PM10 | Sales |
 |---|---|---|---|---|---|---|---|

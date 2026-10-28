@@ -12,8 +12,8 @@ and the borough pay groups are re-estimated with the same method for comparison.
 Writes model_v1_income_small_area.md and one figure per income measure: figures/wtp_by_income_lsoa.png,
 figures/wtp_by_income_msoa.png and figures/wtp_by_income_borough.png.
 
-Run from the Code folder:
-    python model_v1_income_small_area.py
+Run from the repository root:
+    python models/model_v1_income_small_area.py
 
 Needs: pandas, numpy, matplotlib, xlrd (for the ONS .xls file)
 Data:  data/land_registry_pollution.dta
@@ -29,12 +29,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from model_v1 import CODE_DIR, DATA_DIR, fe_ols, load_data, pct, stars
+from model_v1 import CODE_DIR, MODEL_DIR, DATA_DIR, fe_ols, load_data, pct, stars
 import model_v1_income_groups
 from model_v1_income_groups import (BASE, FIG_DIR, GROUPS, INCOME_SPECS, add_pay_terms, choose_income_form,
                                     gbp, p_fmt, p_normal, plot_groups, wald)
 
-MD_FILE = CODE_DIR / "model_v1_income_small_area.md"
+MD_FILE = MODEL_DIR / "model_v1_income_small_area.md"
 LSOA_FILE = DATA_DIR / "gla_lsoa_atlas" / "lsoa-data.csv"
 MSOA_FILE = DATA_DIR / "ons_msoa_income" / "ons-model-based-income-estimates-msoa.xls"
 
@@ -257,7 +257,7 @@ def main():
         ratio, wtp_unit, p_unit = unit_elasticity_test(r["m"], r["est"])
         sections.append(f"""### {MEASURES[name][0]}
 
-![Income groups by {MEASURES[name][1]}](figures/wtp_by_income_{name}.png)
+![Income groups by {MEASURES[name][1]}](../figures/wtp_by_income_{name}.png)
 
 {group_table(r, name)}
 

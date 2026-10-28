@@ -152,7 +152,7 @@ the local-park measure stays the same).
 WTP = −effect × mean price of the group. "All homes" is the main tercile model; flats and houses are separate
 models (with their own terciles cut over all sales).
 
-![PM10 effect by green space](figures/green_space.png)
+![PM10 effect by green space](../figures/green_space.png)
 
 ## Verdict
 

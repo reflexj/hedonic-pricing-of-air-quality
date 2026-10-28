@@ -42,6 +42,11 @@ from matplotlib.path import Path
 from pyproj import Transformer
 from scipy.ndimage import gaussian_filter
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent / "models"))   # the model scripts live in models/
+
 from model_v1 import CODE_DIR, DATA_DIR, LAST_YEAR, load_data
 
 MD_FILE = CODE_DIR / "air_pollution_maps.md"

@@ -7,8 +7,8 @@ the estimate towards zero. This script re-estimates the v1 model (M8) with smoot
 
 Writes model_v1_pm10_smoothing.md and figures/pm10_smoothing.png.
 
-Run from the Code folder:
-    python model_v1_pm10_smoothing.py
+Run from the repository root:
+    python models/model_v1_pm10_smoothing.py
 
 Needs: pandas, numpy, matplotlib
 Data:  data/land_registry_pollution.dta
@@ -20,10 +20,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from model_v1 import (ACCESS, AMENITY, CLUSTER, CODE_DIR, LAST_YEAR, PROPERTY, SOCIO, fe_ols, load_data,
+from model_v1 import (ACCESS, AMENITY, CLUSTER, CODE_DIR, MODEL_DIR, LAST_YEAR, PROPERTY, SOCIO, fe_ols, load_data,
                       pct, stars)
 
-MD_FILE = CODE_DIR / "model_v1_pm10_smoothing.md"
+MD_FILE = MODEL_DIR / "model_v1_pm10_smoothing.md"
 FIG_DIR = CODE_DIR / "figures"
 FIG_FILE = FIG_DIR / "pm10_smoothing.png"
 
@@ -219,7 +219,7 @@ Means over all sales (2005-2015, prices trimmed). "Monitoring sites in use" coun
 year, which is close to the number of sites that are the nearest site for at least one home. The last column
 is the variation that the v1 model actually uses (sample 2005-{LAST_YEAR}).
 
-![PM10 over time and PM10 effect by specification](figures/pm10_smoothing.png)
+![PM10 over time and PM10 effect by specification](../figures/pm10_smoothing.png)
 
 - From 2010 to 2011 PM10 rose by {change[2011].mean():.1f} µg/m³ on average and in
   {(change[2011] > 0).mean() * 100:.0f}% of LSOAs, so the jump hit almost all of London at the same time. It lasted

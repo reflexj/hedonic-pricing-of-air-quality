@@ -12,8 +12,8 @@ PM10 × income term in the joint model, because model_v1_income_small_area.md fo
 
 Writes model_v2.md and figures/v2_interactions.png.
 
-Run from the Code folder:
-    python model_v2.py
+Run from the repository root:
+    python models/model_v2.py
 
 Needs: pandas, numpy, matplotlib
 Data:  data/land_registry_pollution.dta, data/gla_lsoa_atlas/lsoa-data.csv
@@ -25,13 +25,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from model_v1 import (ACCESS, AMENITY, CLUSTER, CODE_DIR, PROPERTY, SOCIO, fe_ols, load_data, pct, stars,
+from model_v1 import (ACCESS, AMENITY, CLUSTER, CODE_DIR, MODEL_DIR, PROPERTY, SOCIO, fe_ols, load_data, pct, stars,
                       two_fe_ols)
 from model_v1_income_groups import add_pay_terms, gbp, p_fmt, p_normal
 from model_v1_income_small_area import LSOA_FILE, lincom
 from model_v1_pm10_smoothing import add_smoothed_pm10
 
-MD_FILE = CODE_DIR / "model_v2.md"
+MD_FILE = MODEL_DIR / "model_v2.md"
 FIG_DIR = CODE_DIR / "figures"
 FIG_FILE = FIG_DIR / "v2_interactions.png"
 
@@ -446,7 +446,7 @@ From the one-interaction models. WTP in GBP only where the groups have different
 |---|---|---|---|---|
 {chr(10).join(eff_md)}
 
-![PM10 effect by group](figures/v2_interactions.png)
+![PM10 effect by group](../figures/v2_interactions.png)
 
 ### Detail by interaction
 

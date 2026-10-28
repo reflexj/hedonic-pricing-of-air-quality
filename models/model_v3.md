@@ -117,7 +117,7 @@ values).
 
 WTP = −effect × mean price of the group.
 
-![PM10 effect across model versions](figures/v3_final.png)
+![PM10 effect across model versions](../figures/v3_final.png)
 
 ### Full coefficient table
 

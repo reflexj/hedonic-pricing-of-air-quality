@@ -17,11 +17,12 @@ the instrument is weak, so the estimates are well-controlled associations rather
 
 ## Final model (v3)
 
-$$
-\ln P_{ijt} = \beta\,\text{PM}^{(3)}_{jt} + \theta_1\,\text{PM}^{(3)}_{jt}\times\text{House}_i
-+ \theta_2\,\text{PM}^{(3)}_{jt}\times\text{LowGreen}_i + X_i\gamma + R_i\rho + \lambda_1\text{Green}_i
-+ \lambda_2\text{LowGreen}_i + B_{bt}\delta + \alpha_j + \tau_q + \varepsilon_{ijt}
-$$
+```math
+\begin{aligned}
+\ln P_{ijt} = {} & \beta\,\mathrm{PM}^{(3)}_{jt} + \theta_1\,\mathrm{PM}^{(3)}_{jt}\times \mathrm{House}_i + \theta_2\,\mathrm{PM}^{(3)}_{jt}\times \mathrm{LowGreen}_i \\
+& + X_i\gamma + R_i\rho + \lambda_1\,\mathrm{Green}_i + \lambda_2\,\mathrm{LowGreen}_i + B_{bt}\delta + \alpha_j + \tau_q + \varepsilon_{ijt}
+\end{aligned}
+```
 
 - PM10 is the mean of the year of sale and the two years before at the nearest monitoring site.
 - The controls are property type, new build, tenure, distances (log and log²), bus access, census shares, the borough
@@ -37,7 +38,7 @@ $$
 | Houses, least green third | −0.29%** | £1,167 |
 
 \*\* p < 0.05, \*\*\* p < 0.01. Both interactions are significant at 5% in all eight robustness checks, including
-LSOA-by-year fixed effects. Full results: [`model_v3.md`](model_v3.md).
+LSOA-by-year fixed effects. Full results: [`model_v3.md`](models/model_v3.md).
 Total costs: [`total_cost_using_v3.md`](total_cost_using_v3.md).
 
 ## Interpretation
@@ -53,7 +54,7 @@ Total costs: [`total_cost_using_v3.md`](total_cost_using_v3.md).
   at a 3.5% discount rate.
 - **Tests without a robust result:** no income gradient in WTP, no non-linearity in PM10, and no effect of NOx or crime
   once PM10 is included ([`null_results.txt`](null_results.txt)). Green space as an instrument for PM10 is too weak
-  (first-stage F ≤ 5.6) ([`model_v4.md`](model_v4.md)).
+  (first-stage F ≤ 5.6) ([`model_v4.md`](models/model_v4.md)).
 
 ## Limitations
 
@@ -80,9 +81,9 @@ The data are not in the repository. Put them into `data/` with these names:
 
 ```bash
 pip install pandas numpy scipy matplotlib shapely pyproj pyshp
-python model_v3.py
+python models/model_v3.py
 ```
 
-`model_v3.py` writes `model_v3.md` and builds the road and green-space features on its first run. Earlier versions
-(`model_v0` to `model_v2_*`), robustness analyses (`model_v1_*`, `model_v2_*`) and the IV attempt (`model_v4`) each
-write a `.md` file with their results. A few analyses need extra data, listed at the top of each script.
+`models/model_v3.py` writes `models/model_v3.md` and builds the road and green-space features on its first run. All model versions are in `models/`:
+earlier versions (`model_v0` to `model_v2`), robustness analyses (`model_v1_*`, `model_v2_*`) and the IV attempt
+(`model_v4`), each with a `.md` file of its results. A few analyses need extra data, listed at the top of each script.
