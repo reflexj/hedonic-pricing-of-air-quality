@@ -1,6 +1,8 @@
 # Hedonic Pricing of Air Quality
 
 HE3027 Housing Economics group project (NTU). Do London house prices reflect air pollution?
+Group 12: Biravin Kalathevan, Simon Fröhlich, Celes Ong, Kaveri Goswami and Benjamin Koh Wing Kiat.
+
 
 **Paper:** link follows once the final report is finished.
 
