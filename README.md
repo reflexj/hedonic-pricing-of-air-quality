@@ -1,89 +1,88 @@
-# HE3027 Group Project: Air Quality and House Prices in London
+# Hedonic Pricing of Air Quality
 
-## Data
+HE3027 Housing Economics group project (NTU). Do London house prices reflect air pollution?
 
-The data files are not on GitHub (too large). Put them into the `data/` folder:
+**Paper:** link follows once the final report is finished.
 
-```
-Code/
-└── data/
-    ├── land_registry_pollution.dta
-    ├── land_registry_crime.dta
-    ├── land_registry_tube.dta
-    ├── gla_lsoa_atlas/lsoa-data.csv                              (only for model_v1_income_small_area.py, model_v2.py)
-    ├── ons_msoa_income/ons-model-based-income-estimates-msoa.xls  (only for model_v1_income_small_area.py)
-    ├── os_open_roads/oproad_essh_gb.zip                          (only for model_v2_roads.py, keep zipped)
-    ├── defra_road_noise/Road_Lden_London.shp (+ .dbf .shx .prj)  (only for model_v2_roads.py, unzipped)
-    ├── road_features.csv                                         (created by model_v2_roads.py on its first run)
-    ├── epc_addresscloud/<borough>.parquet (33 files)             (only for model_v1_energy_efficiency.py)
-    ├── os_codepoint_open/codepo_gb.zip                           (only for model_v1_energy_efficiency.py, keep zipped)
-    ├── epc_postcode.csv + epc_postcode_info.json                 (created by model_v1_energy_efficiency.py on its first run)
-    ├── os_open_greenspace/opgrsp_essh_tq.zip, opgrsp_essh_tl.zip  (only for model_v1_green_space.py, keep zipped)
-    ├── green_features.csv                                        (created by model_v1_green_space.py on its first run; also used by model_v3.py)
-    └── london_boundaries/statistical-gis-boundaries-london.zip   (only for air_pollution_maps.py, keep zipped)
-```
+## Abstract
 
-The two income files are free downloads from the London Datastore:
-[LSOA Atlas](https://data.london.gov.uk/dataset/lsoa-atlas) ("Current LSOA boundaries post-2011", CSV) and
-[ONS Model-Based Income Estimates, MSOA](https://data.london.gov.uk/dataset/ons-model-based-income-estimates-msoa).
+We estimate London residents' willingness to pay (WTP) for cleaner air with a hedonic price model of 270,399
+residential sales from 2007 to 2014. Pollution is the three-year average of PM10 at the nearest monitoring site.
+LSOA and year-quarter fixed effects identify the effect from changes in PM10 within small neighbourhoods
+over time. One µg/m³ more PM10 lowers prices by 0.36% on average, about £1,292 per home at the mean price, or
+£4.3bn for the London housing stock. The discount is concentrated in flats (−0.42% per µg/m³ in greener postcodes,
+−0.65% in the least green third) and is close to zero for houses in greener postcodes. Distance to main roads and road
+noise are priced but leave the PM10 effect unchanged. An attempt to instrument PM10 with green space failed because
+the instrument is weak, so the estimates are well-controlled associations rather than causal effects.
 
-The road data are also free (Open Government Licence):
-[OS Open Roads](https://osdatahub.os.uk/downloads/open/OpenRoads) (ESRI Shapefile, GB, about 600 MB; only the
-London grid squares TQ and TL are read) and the Defra road noise map 2012 from the London Datastore,
-[Noise pollution in London](https://data.london.gov.uk/dataset/noise-pollution-in-london-2zwnk) (`Road_Lden_London.zip`).
+## Final model (v3)
 
-The energy efficiency data are free as well (Open Government Licence, no account needed):
-EPC ratings from the copy of the EPC register by [Addresscloud on Source Cooperative](https://source.coop/addresscloud/epc)
-(folder `geoparquet-local-authority`, one file per London borough, e.g.
-`https://data.source.coop/addresscloud/epc/geoparquet-local-authority/Camden.parquet`; names with `_` instead of
-spaces) and the postcode centroids [OS Code-Point Open](https://osdatahub.os.uk/downloads/open/CodePointOpen)
-(CSV, GB, about 15 MB).
+$$
+\ln P_{ijt} = \beta\,\text{PM}^{(3)}_{jt} + \theta_1\,\text{PM}^{(3)}_{jt}\times\text{House}_i
++ \theta_2\,\text{PM}^{(3)}_{jt}\times\text{LowGreen}_i + X_i\gamma + R_i\rho + \lambda_1\text{Green}_i
++ \lambda_2\text{LowGreen}_i + B_{bt}\delta + \alpha_j + \tau_q + \varepsilon_{ijt}
+$$
 
-The green-space data are [OS Open Greenspace](https://osdatahub.os.uk/downloads/open/OpenGreenspace) (ESRI Shapefile,
-the 100 km squares TQ and TL, about 5 MB and 2 MB, Open Government Licence).
+- PM10 is the mean of the year of sale and the two years before at the nearest monitoring site.
+- The controls are property type, new build, tenure, distances (log and log²), bus access, census shares, the borough
+  economy by year, being within 50 m of a main road, and road noise of 65 dB or more.
+- α are LSOA fixed effects and τ year-quarter fixed effects. Standard errors are clustered by MSOA.
 
-The London boundaries for the maps are the
-[Statistical GIS Boundary Files for London](https://data.london.gov.uk/dataset/statistical-gis-boundary-files-london)
-(`statistical-gis-boundaries-london.zip`, about 27 MB, London Datastore, Open Government Licence).
+| Group | Effect of +1 µg/m³ PM10 | WTP per µg/m³ |
+|---|---|---|
+| All homes (model without interactions) | −0.36%*** | £1,292 |
+| Flats, greener postcodes | −0.42%*** | £1,319 |
+| Flats, least green third | −0.65%*** | £2,098 |
+| Houses, greener postcodes | −0.05% | £209 |
+| Houses, least green third | −0.29%** | £1,167 |
 
-The file names must stay exactly like this, otherwise the code will not find them.
+\*\* p < 0.05, \*\*\* p < 0.01. Both interactions are significant at 5% in all eight robustness checks, including
+LSOA-by-year fixed effects. Full results: [`model_v3.md`](model_v3.md).
+Total costs: [`total_cost_using_v3.md`](total_cost_using_v3.md).
 
-## Run
+## Interpretation
 
-The file names show which model a script belongs to: `model_v0` (first regressions), `model_v1` (M8 with
-the controls step by step) and `model_v1_*` (analyses built on it), `model_v2` and `model_v2_*`, `model_v3`
-(the complete final model) and `model_v4` (green space as an instrument for PM10).
+- **Buyers pay for cleaner air.** Compared with homes in the same neighbourhood, a home whose PM10 rises by 1 µg/m³
+  relative to London as a whole sells for about 0.36% less. At the mean PM10 level this is an elasticity of −0.09.
+- **Flats bear most of the discount.** Flat owners have no garden and fewer ways to avoid outdoor air. The discount
+  is larger again where there is little green space nearby, but this interaction is the less certain one: it was
+  chosen after exploratory tests and does not pass a Bonferroni correction for the twelve interactions tested.
+- **PM10 is not a proxy for traffic.** Main roads and noise each lower prices by about 2.5%, but adding them changes
+  the PM10 effect by at most 0.02 percentage points.
+- **In pounds:** 1 µg/m³ less PM10 across London is worth about £4.3bn (95% CI £2.4bn to £6.2bn), or £150m a year
+  at a 3.5% discount rate.
+- **Tests without a robust result:** no income gradient in WTP, no non-linearity in PM10, and no effect of NOx or crime
+  once PM10 is included ([`null_results.txt`](null_results.txt)). Green space as an instrument for PM10 is too weak
+  (first-stage F ≤ 5.6) ([`model_v4.md`](model_v4.md)).
 
-```
-pip install pandas numpy matplotlib xlrd scipy shapely pyproj pyshp pyarrow
-python data_exploration.py
-python model_v0.py
-python model_v1.py
-python model_v1_non-linear.py
-python model_v1_income_groups.py
-python model_v1_income_small_area.py
-python model_v1_pm10_smoothing.py
-python model_v1_energy_efficiency.py
-python model_v1_green_space.py
-python model_v2.py
-python model_v2_roads.py
+## Limitations
+
+- **Measurement.** PM10 is measured at the nearest of 59 to 74 monitoring sites, not at the home. This biases the
+  effect towards zero, so the estimates are more likely too small than too large.
+- **Causality.** Local shocks that move both pollution and prices could bias β. With borough-by-year fixed effects,
+  the effect for flats in greener postcodes falls to −0.16% (significant at 10%).
+- **Timing of the added data.** Roads and green space come from current releases and noise from 2012, while the sales
+  run from 2007 to 2014. All are measured at the postcode centroid.
+- **Marginal WTP.** The effect is identified from small changes (two thirds within ±1 µg/m³), so the totals for
+  reaching the WHO guidelines are extrapolations, and they include only costs that buyers perceive.
+
+## Reproducing the results
+
+The data are not in the repository. Put them into `data/` with these names:
+
+| File | Source |
+|---|---|
+| `land_registry_pollution.dta` | Course data set (HM Land Registry sales with PM10) |
+| `gla_lsoa_atlas/lsoa-data.csv` | [London LSOA Atlas](https://data.london.gov.uk/dataset/lsoa-atlas) |
+| `os_open_roads/oproad_essh_gb.zip` | [OS Open Roads](https://osdatahub.os.uk/downloads/open/OpenRoads) |
+| `defra_road_noise/Road_Lden_London.shp` | [Noise pollution in London](https://data.london.gov.uk/dataset/noise-pollution-in-london-2zwnk) |
+| `os_open_greenspace/opgrsp_essh_tq.zip`, `opgrsp_essh_tl.zip` | [OS Open Greenspace](https://osdatahub.os.uk/downloads/open/OpenGreenspace) |
+
+```bash
+pip install pandas numpy scipy matplotlib shapely pyproj pyshp
 python model_v3.py
-python model_v4.py
-python air_pollution_maps.py
 ```
 
-- `data_exploration.py` creates `data_exploration.md` and the graphs in `figures/`.
-- `model_v0.py` creates `model_v0.md` with the regression table.
-- `model_v1.py` creates `model_v1.md` (controls step by step, v1 model M8, robustness checks).
-- `model_v1_non-linear.py` creates `model_v1_non-linear.md` (non-linear distance controls; needs scipy).
-- `model_v1_income_groups.py` creates `model_v1_income_groups.md` and `figures/wtp_by_income_group.png` (functional form of income, WTP by low/middle/high income boroughs).
-- `model_v1_income_small_area.py` creates `model_v1_income_small_area.md` and one graph per income measure, `figures/wtp_by_income_{lsoa,msoa,borough}.png` (WTP by income group with LSOA and MSOA household income, data sources, all specifications).
-- `model_v1_pm10_smoothing.py` creates `model_v1_pm10_smoothing.md` and `figures/pm10_smoothing.png` (the 2011-2012 PM10 jump, smoothed PM10 measures and an IV with last year's PM10, with sources).
-- `model_v1_energy_efficiency.py` creates `model_v1_energy_efficiency.md` and `figures/energy_efficiency.png` (are energy-efficient homes less affected by PM10? PM10 × average EPC rating of the homes of the same type in the postcode, efficiency groups A-C / D / E-G, robustness checks, data sources). Needs shapely, pyproj, scipy and pyarrow.
-- `model_v1_green_space.py` creates `model_v1_green_space.md` and `figures/green_space.png` (does green space change the PM10 effect? PM10 × green share within 500 m, PM10 × local park within 400 m, green terciles, robustness checks, data sources). Needs scipy, shapely, pyproj and pyshp; uses `road_features.csv` from `model_v2_roads.py` for one check if it exists.
-- `model_v2.py` creates `model_v2.md` and `figures/v2_interactions.png` (v2 model: log-quadratic distances, cubic borough pay, 3-year average PM10; interactions PM10 × house, PM10², PM10 × share aged 0-15/65+, PM10 × education). Needs `gla_lsoa_atlas/lsoa-data.csv`.
-- `model_v2_roads.py` creates `model_v2_roads.md` and `figures/v2_roads.png` (v2 model with distance to the nearest motorway / A road and road noise: price effects, PM10 × near a main road, PM10 × noise, and whether main roads explain the larger PM10 discount for flats). Needs shapely, pyproj and pyshp.
-- `model_v3.py` creates `model_v3.md` and `figures/v3_final.png` (the complete final model: inventory of everything we controlled for or tested, a control audit that decides which controls stay, the v3 model with 3-year average PM10, main roads, road noise and green space, and the interactions PM10 × house and PM10 × low green space, robustness checks). Needs `road_features.csv` and `green_features.csv` (built by `model_v2_roads.py` and `model_v1_green_space.py`, or on its first run if the road and green data are there).
-- `model_v4.py` creates `model_v4.md` and `figures/v4_green_iv.png` (green space as an instrument for PM10, the lecturer's suggestion: 2SLS on the v3 model with LSOA FE, borough FE and green share × year, first-stage F statistics, Anderson-Rubin intervals, checks of the exclusion restriction; result: a weak instrument). Needs the same data as `model_v3.py`.
-- `air_pollution_maps.py` creates `air_pollution_maps.md` and the heat maps `figures/map_pm10.png`, `figures/map_nox.png` and `figures/map_pm10_by_year.png` (PM10 and NOx from our data, mean 2005-2014 per postcode, smoothed; with main roads, the Thames, borough lines and the borough means), each also with a white background (`figures/map_*_white.png`). Needs `london_boundaries/statistical-gis-boundaries-london.zip`; draws roads if `os_open_roads/oproad_essh_gb.zip` is there.
-- `null_results.txt` is a running list of everything we tested that had no (robust) effect, with numbers and the source file.
+`model_v3.py` writes `model_v3.md` and builds the road and green-space features on its first run. Earlier versions
+(`model_v0` to `model_v2_*`), robustness analyses (`model_v1_*`, `model_v2_*`) and the IV attempt (`model_v4`) each
+write a `.md` file with their results. A few analyses need extra data, listed at the top of each script.
